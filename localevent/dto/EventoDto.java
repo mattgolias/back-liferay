@@ -1,8 +1,10 @@
 package com.liferay.localevent.dto;
 
+import com.liferay.localevent.model.Funcionario;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 public class EventoDto {
@@ -20,14 +22,28 @@ public class EventoDto {
     private String data;
 
     @NotBlank
-    private String horarioInical;
+    private String horarioInicio;
 
     @NotBlank
     private String horarioFinal;
 
     @NotBlank
-    private int vagas;
+    private String vagas;
 
-    @NotBlank
     private String criadorDoEvento;
+
+    private String descricao;
+
+    private List<Funcionario> inscritos;
+
+    private String quantidade;
+
+    private String start;
+
+    private String status;
+
+    private String date;
+
+    private String email;
+
 }
