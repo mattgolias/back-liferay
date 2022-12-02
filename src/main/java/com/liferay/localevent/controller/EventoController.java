@@ -27,7 +27,7 @@ public class EventoController {
 
     @PostMapping
     public ResponseEntity<Object> saveEvento(@RequestBody @Valid EventoDto eventoDto) {
-        if(eventoService.existByDataAndLocalAndHorarioInicial(eventoDto.getData(), eventoDto.getLocal(), eventoDto.getHorarioInical())) {
+        if(eventoService.existByDataAndLocalAndHorarioInicio(eventoDto.getData(), eventoDto.getLocal(), eventoDto.getHorarioInicio())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: Horário indisponível");
         }
         var evento = new Evento();
@@ -49,8 +49,8 @@ public class EventoController {
         return ResponseEntity.status(HttpStatus.OK).body(eventoOptional.get());
     }
 
-    @DeleteMapping("/id")
-    public ResponseEntity<Object> deleteEvento(@PathVariable(value = "id") UUID id, @RequestBody @Valid EventoDto eventoDto) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteEvento(@PathVariable(value = "id") UUID id) {
         Optional<Evento> eventoOptional = eventoService.findById(id);
         if(eventoOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evento não encontrado");
@@ -59,7 +59,7 @@ public class EventoController {
         return ResponseEntity.status(HttpStatus.OK).body("Evento deletado com sucesso");
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> updateEvento(@PathVariable(value = "id") UUID id, @RequestBody @Valid EventoDto eventoDto) {
         Optional<Evento> eventoOptional = eventoService.findById(id);
         if(eventoOptional.isEmpty()) {

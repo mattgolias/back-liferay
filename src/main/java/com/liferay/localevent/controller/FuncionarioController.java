@@ -2,8 +2,8 @@ package com.liferay.localevent.controller;
 
 import com.liferay.localevent.dto.FuncionarioDto;
 import com.liferay.localevent.model.Funcionario;
-import com.liferay.localevent.repository.FuncionarioRepository;
 import com.liferay.localevent.services.FuncionarioService;
+import com.liferay.localevent.services.EmailService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +20,20 @@ import java.util.UUID;
 public class FuncionarioController {
 
     final FuncionarioService funcionarioService;
+    final EmailService emailService;
 
-    public FuncionarioController(FuncionarioService funcionarioService) {
+    public FuncionarioController(FuncionarioService funcionarioService, EmailService emailService) {
         this.funcionarioService = funcionarioService;
+        this.emailService = emailService;
     }
 
     @PostMapping
     public ResponseEntity<Object> saveFuncionario(@RequestBody @Valid FuncionarioDto funcionarioDto) {
         if(funcionarioService.existByEmail(funcionarioDto.getEmail())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: Email já está em uso!");
+        }
+        if(!emailService.existByEmail(funcionarioDto.getEmail())){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email não registrado no banco de dados");
         }
         var funcionario = new Funcionario();
         BeanUtils.copyProperties(funcionarioDto, funcionario);
